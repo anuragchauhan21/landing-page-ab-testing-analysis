@@ -91,8 +91,7 @@ landing-page-ab-testing-analysis/
 ├── README.md
 ├── requirements.txt
 └── data/
-    ├── ab_test.csv
-    └── countries_ab.csv
+    └──  ab_test.csv
 ```
 
 ## Future Improvements
