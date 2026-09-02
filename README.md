@@ -1,106 +1,121 @@
 # Landing Page A/B Testing Analysis
 
-Business-focused A/B testing case study evaluating whether a new landing page improves user conversion. The analysis validates experiment quality, measures the impact on conversion, and translates statistical findings into a product recommendation.
+## Overview
 
-## Business Problem
+An e commerce company introduced a new landing page to improve user conversion. An A/B test was conducted to compare the new page with the existing page before making a decision.
 
-An e-commerce company introduced a new landing page to increase customer conversion. Rather than deploying the new design to every user, an A/B experiment was conducted to compare its performance against the existing landing page.
-
-This project analyzes the experiment to determine whether the observed change in conversion is large enough to support a product rollout.
+This project evaluates the experiment data to determine whether the new landing page delivered a meaningful improvement in conversion.
 
 ## Business Question
 
-**Should the company replace the existing landing page with the new landing page?**
-
-## At a Glance
-
-| Metric | Value |
-|---------|-------|
-| Dataset | E-commerce A/B Testing Dataset |
-| Users Collected | 294,478 |
-| Users Analyzed | 290,584 |
-| Invalid Records Removed | 3,894 |
-| Experiment Groups | Control and Treatment |
-| Primary Metric | Conversion Rate |
-| Statistical Test | Two-Proportion Z-Test |
-| Confidence Level | 95% |
-| Final Decision | Retain Existing Landing Page |
+**Does the new landing page improve conversion compared with the existing landing page?**
 
 ## Dataset
 
-| Attribute | Value |
-|----------|-------|
-| Source | Kaggle |
-| Dataset | E-commerce A/B Testing |
-| Records Collected | 294,478 |
-| Records Used | 290,584 |
-| Files | `ab_test.csv`, `countries_ab.csv` |
-| Link | [Dataset](https://www.kaggle.com/datasets/ahmedmohameddawoud/ecommerce-ab-testing) |
+The dataset contains user level experiment data with information about:
 
-The dataset contains user-level experiment data including experiment group assignment, landing page shown, and conversion outcome. It is based on the well-known Udacity A/B Testing project and is commonly used to study online experimentation. :contentReference[oaicite:1]{index=1}
+| Field            | Description                |
+| ---------------- | -------------------------- |
+| User ID          | Identifier for each user   |
+| Experiment Group | Control or Treatment       |
+| Landing Page     | Page shown to the user     |
+| Converted        | Whether the user converted |
+| Time             | Experiment timestamp       |
 
-## Analysis Workflow
+The dataset initially contained **294,478 records**.
 
-| Stage | Business Objective |
-|---------|-------------------|
-| Experiment Validation | Verified experiment quality by identifying duplicate users and incorrect page assignments before analysis. |
-| Data Cleaning | Removed **3,894** invalid records to ensure every user contributed only one valid observation. |
-| Experiment Overview | Evaluated traffic allocation and established the baseline conversion rate across **290,584** users. |
-| Conversion Analysis | Compared conversion performance between the control and treatment landing pages. |
-| Statistical Validation | Tested whether the observed conversion difference was statistically significant using a Two-Proportion Z-Test and a 95% confidence interval. |
-| Business Recommendation | Converted statistical findings into a product decision supported by data. |
+## Analysis Approach
 
-## Experiment Results
+The analysis followed four main steps:
 
-| Metric | Result |
-|---------|--------|
-| Overall Conversion Rate | **11.96%** |
-| Control Conversion Rate | **12.04%** |
-| Treatment Conversion Rate | **11.88%** |
-| Absolute Difference | **-0.16 Percentage Points** |
-| P-value | **0.1899** |
-| 95% Confidence Interval | **-0.39% to 0.08%** |
+1. Validate the experiment data and identify data quality issues
+2. Compare conversion rates between the two groups
+3. Test whether the observed difference was statistically significant
+4. Translate the results into a business recommendation
 
-## Key Business Insights
+## Data Validation
 
-- The experiment initially contained **294,478** user records, of which **3,894** invalid observations were removed before analysis to improve experiment reliability.
-- The final analysis included **290,584** unique users, providing a large sample for comparing conversion performance.
-- Traffic allocation remained almost perfectly balanced, with **50.01%** of users assigned to the treatment group and **49.99%** assigned to the control group.
-- The new landing page achieved a conversion rate of **11.88%**, compared with **12.04%** for the existing landing page.
-- The observed difference of **-0.16 percentage points** was not statistically significant (**p = 0.1899**).
-- The **95% confidence interval (-0.39% to 0.08%)** includes zero, indicating that the true impact of the new landing page could be slightly negative, slightly positive, or negligible.
+Before comparing conversion, the experiment data was checked for duplicate users and incorrect group and page assignments.
 
-## Business Recommendation
+The analysis found:
 
-The analysis does not provide sufficient statistical evidence that the new landing page improves user conversion.
+**3,894 duplicate user records**
 
-Based on the experiment results, replacing the existing landing page would introduce implementation effort without demonstrating a measurable improvement in business performance.
+**3,893 records with inconsistent experiment group and landing page assignments**
 
-The recommended decision is to retain the existing landing page and evaluate an improved design through a future A/B experiment.
+Incorrect assignments were removed first, followed by duplicate user removal.
 
-## Skills Demonstrated
+The final dataset contained **290,584 unique users**.
 
-`A/B Testing` `Product Analytics` `Experiment Design` `Statistical Hypothesis Testing` `Confidence Intervals` `Data Validation` `Data Cleaning` `Exploratory Data Analysis` `Business Analytics` `Business Decision Making` `Python` `Pandas` `NumPy` `Matplotlib` `Statsmodels`
+The experiment groups were also well balanced:
 
-## Repository Structure
+| Group     |   Users |  Share |
+| --------- | ------: | -----: |
+| Control   | 145,274 | 49.99% |
+| Treatment | 145,310 | 50.01% |
 
-```text
-landing-page-ab-testing-analysis/
+## Conversion Results
 
-├── landing_page_ab_testing.ipynb
-├── README.md
-├── requirements.txt
-└── data/
-    └──  ab_test.csv
-```
+Conversion rate was used as the primary measure of landing page performance.
 
-## Future Improvements
+**Conversion Rate = Converted Users ÷ Total Users**
 
-- Analyze experiment performance across user segments such as country.
-- Evaluate Sample Ratio Mismatch (SRM) as an additional experiment quality check.
-- Estimate the business impact under different traffic and conversion scenarios.
-- Build an interactive dashboard to monitor experiment performance and key metrics.
+| Metric          | Existing Page |   New Page |
+| --------------- | ------------: | ---------: |
+| Users           |       145,274 |    145,310 |
+| Converted Users |        17,489 |     17,264 |
+| Conversion Rate |    **12.04%** | **11.88%** |
 
-## Author
+The new page had a **0.16 percentage point lower** conversion rate than the existing page.
 
-[**Anurag Chauhan**](https://www.linkedin.com/in/theanuragchauhan/)
+However, this observed difference alone does not establish that the two pages perform differently. Statistical testing was used to determine whether the difference was meaningful.
+
+## Statistical Analysis
+
+A **Two Proportion Z Test** was used to compare the conversion rates of the two groups.
+
+The test evaluated whether the difference between the existing and new landing pages was statistically significant at a **5% significance level**.
+
+| Measure                  |                       Result |
+| ------------------------ | ---------------------------: |
+| Existing Page Conversion |                       12.04% |
+| New Page Conversion      |                       11.88% |
+| Difference               | 0.16 percentage points lower |
+| Z Statistic              |                       1.3109 |
+| P Value                  |                   **0.1899** |
+| 95% Confidence Interval  |      **−0.3938% to 0.0781%** |
+
+The p value of **0.1899** is greater than the 0.05 significance level.
+
+The confidence interval also includes zero.
+
+Therefore, the experiment does not provide sufficient statistical evidence that the new landing page changes conversion.
+
+## Key Insights
+
+The existing page achieved a **12.04% conversion rate**, while the new page achieved **11.88%**.
+
+The new page therefore performed slightly worse in the observed experiment, with a difference of **0.16 percentage points**.
+
+However, the difference was **not statistically significant**, meaning the observed gap could reasonably be due to variation in the experiment.
+
+## Recommendation
+
+### Retain the Existing Landing Page
+
+Based on the experiment results, the **existing landing page should be retained**.
+
+The new page did not demonstrate a statistically significant improvement in conversion, so the available evidence does not support replacing the existing page.
+
+## Tools and Methods
+
+| Category                | Details                                                                              |
+| ----------------------- | ------------------------------------------------------------------------------------ |
+| **Programming**         | Python                                                                               |
+| **Libraries**           | Pandas, NumPy, Matplotlib, Statsmodels                                               |
+| **Analysis**            | Data Cleaning, Experiment Validation, Conversion Analysis                            |
+| **Statistical Methods** | A/B Testing, Two Proportion Z Test, Hypothesis Testing, Confidence Interval Analysis |
+
+
+
+Project by [**Anurag Chauhan**](https://www.linkedin.com/in/theanuragchauhan/)
